@@ -6,6 +6,8 @@ export const data = new SlashCommandBuilder()
   .setDescription("作業開始を打刻します");
 
 export async function execute(interaction) {
+  await interaction.deferReply({ ephemeral: true });
+
   try {
     const res = await callGas("onduty", {
       user_id: interaction.user.id,
@@ -13,22 +15,13 @@ export async function execute(interaction) {
     });
 
     if (res.already) {
-      await interaction.reply({
-        content: `すでに稼働中だよ（開始：${res.start_ts}）`,
-        ephemeral: true,
-      });
+      await interaction.editReply(`すでに稼働中だよ（開始：${res.start_ts}）`);
       return;
     }
 
-    await interaction.reply({
-      content: `✅ 作業開始を記録したよ！\n開始：${res.start_ts}`,
-      ephemeral: true,
-    });
+    await interaction.editReply(`✅ 作業開始！\n開始：${res.start_ts}`);
   } catch (e) {
     console.error("onduty error:", e);
-    await interaction.reply({
-      content: `❌ エラーが出たよ：${e.message}`,
-      ephemeral: true,
-    });
+    await interaction.editReply(`❌ エラー：${e.message}`);
   }
 }
