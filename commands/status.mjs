@@ -56,12 +56,4 @@ export async function execute(interaction) {
       ephemeral: true,
     });
   }
-  const debugText = res.debug
-  ? `\n\n[debug]\nuid=${res.debug.query_user_id}\nmk=${res.debug.query_month_key}\nfirst_uid=${res.debug.monthly_first_row?.user_id}\nfound=${res.debug.found}`
-  : "";
-
-await interaction.reply({
-  content: `...通常表示...` + debugText,
-  ephemeral: true,
-});
 }
