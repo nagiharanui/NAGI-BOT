@@ -50,7 +50,12 @@ setInterval(() => {
   });
 }, 30000);
 console.log("🌐 network test start");
-fetch("https://discord.com/api/v10/gateway")
-  .then(r => r.json())
-  .then(j => console.log("🌐 gateway ok:", j?.url))
-  .catch(e => console.log("🌐 gateway fail:", e));
+fetch("https://discord.com/api/v10/gateway", {
+  headers: { "User-Agent": "nagi-bot/1.0" },
+})
+  .then(async (r) => {
+    const text = await r.text();
+    console.log("🌐 gateway status:", r.status, r.headers.get("content-type"));
+    console.log("🌐 gateway body head:", text.slice(0, 200));
+  })
+  .catch((e) => console.log("🌐 gateway fetch error:", e));
