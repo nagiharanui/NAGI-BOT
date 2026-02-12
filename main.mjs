@@ -6,6 +6,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 dotenv.config();
+process.on("unhandledRejection", (err) => console.error("UNHANDLED REJECTION:", err));
+process.on("uncaughtException", (err) => console.error("UNCAUGHT EXCEPTION:", err));
 
 const required = ["DISCORD_TOKEN", "CLIENT_ID", "GAS_WEBAPP_URL", "GAS_SECRET"];
 for (const k of required) {
@@ -86,10 +88,14 @@ client.on("interactionCreate", async (interaction) => {
   }
 });
 
-client.login(process.env.DISCORD_TOKEN).catch((e) => {
-  console.error("❌ Login failed:", e);
-  process.exit(1);
-});
+console.log("🔄 Discord に接続中...");
+client.login(process.env.DISCORD_TOKEN)
+  .then(() => console.log("✅ login() called"))
+  .catch((error) => {
+    console.error("❌ ログインに失敗しました:", error);
+    process.exit(1);
+  });
+
 
 // Render用ヘルスチェック
 const app = express();
