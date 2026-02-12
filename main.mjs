@@ -8,6 +8,13 @@ import { fileURLToPath } from "node:url";
 dotenv.config();
 process.on("unhandledRejection", (err) => console.error("UNHANDLED REJECTION:", err));
 process.on("uncaughtException", (err) => console.error("UNCAUGHT EXCEPTION:", err));
+// --- DEBUG: env 確認（トークンは伏せる） ---
+const token = process.env.DISCORD_TOKEN;
+console.log("ENV keys include DISCORD_TOKEN?", Object.prototype.hasOwnProperty.call(process.env, "DISCORD_TOKEN"));
+console.log("DISCORD_TOKEN length:", token ? token.length : null);
+console.log("DISCORD_TOKEN preview:", token ? `${token.slice(0, 4)}...${token.slice(-4)}` : null);
+
+console.log("ENV keys that look like DISCORD:", Object.keys(process.env).filter(k => k.toUpperCase().includes("DISCORD")));
 
 const required = ["DISCORD_TOKEN", "CLIENT_ID", "GAS_WEBAPP_URL", "GAS_SECRET"];
 for (const k of required) {
