@@ -96,3 +96,17 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.get("/", (req, res) => res.json({ ok: true, uptime: process.uptime() }));
 app.listen(port, () => console.log(`🌐 Web server on ${port}`));
+
+process.on("unhandledRejection", (err) => console.error("UNHANDLED REJECTION:", err));
+process.on("uncaughtException", (err) => console.error("UNCAUGHT EXCEPTION:", err));
+
+client.on("ready", () => console.log("✅ READY"));
+client.on("shardDisconnect", (event, id) => console.log("⚠️ shardDisconnect", id, event?.code, event?.reason));
+client.on("shardError", (error, id) => console.log("❌ shardError", id, error));
+client.on("shardReconnecting", (id) => console.log("🔄 shardReconnecting", id));
+client.on("shardResume", (id) => console.log("✅ shardResume", id));
+
+// 30秒おきに生存ログ（ログが全く出ない問題の切り分けに効く）
+setInterval(() => {
+  console.log("💓 heartbeat", { uptime: process.uptime(), guilds: client.guilds?.cache?.size });
+}, 30000);
