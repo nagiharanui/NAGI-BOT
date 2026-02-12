@@ -1,3 +1,5 @@
+import dns from "node:dns";
+dns.setDefaultResultOrder("ipv4first");
 import { Client, GatewayIntentBits } from "discord.js";
 import dotenv from "dotenv";
 import express from "express";
@@ -47,3 +49,8 @@ setInterval(() => {
     guilds: client.guilds?.cache?.size,
   });
 }, 30000);
+console.log("🌐 network test start");
+fetch("https://discord.com/api/v10/gateway")
+  .then(r => r.json())
+  .then(j => console.log("🌐 gateway ok:", j?.url))
+  .catch(e => console.log("🌐 gateway fail:", e));
